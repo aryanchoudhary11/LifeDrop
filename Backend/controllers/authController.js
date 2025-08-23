@@ -53,7 +53,7 @@ export const register = async (req, res) => {
       role,
     });
 
-    const accessToken = generateAccessToken(user);
+    const accessToken = await generateAccessToken(user);
 
     const refreshToken = await generateRefreshToken(
       user._id,
@@ -75,7 +75,7 @@ export const register = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Register error:", error);
+    console.error("Register error:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 };

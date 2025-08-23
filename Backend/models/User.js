@@ -46,8 +46,6 @@ const userSchema = new Schema(
 
 userSchema.index({ role: 1, status: 1 });
 
-userSchema.index({ email: 1 }, { unique: true });
-
 const User = mongoose.model("User", userSchema);
 
 export default User;
