@@ -142,4 +142,72 @@ export const login = async (req, res) => {
   }
 };
 
-export const refresh = async (req, res) => {};
+export const refresh = async (req, res) => {
+  try {
+    const raw = req.cookies?.refreshToken;
+    if (!raw) {
+      return res.status(401).json({
+        code: "InvalidOrExpiredRefresh",
+        message: "No refresh token provided",
+      });
+    }
+
+    const tokenHash = hashRefresh(raw);
+    const tokenDoc = await RefreshToken.findOne({ tokenHash });
+
+    if (!tokenDoc) {
+      return res.status(401).json({
+        code: "InvalidOrExpiredRefresh",
+        message: "Invalid or expired refresh token",
+      });
+    }
+
+    if (tokenDoc.revokedAt) {
+      await revokeAllUserTokens(tokenDoc.userId);
+      res.clearCookie("refreshToken");
+      return res.status(409).json({
+        code: "TokenReuseDetected",
+        message: "Refresh token reuse detected. All sessions revoked.",
+      });
+    }
+
+    if (tokenDoc.expiresAt <= new Date()) {
+      tokenDoc.revokedAt = new Date();
+      await tokenDoc.save();
+      res.clearCookie("refreshToken");
+      return res.status(401).json({
+        code: "InvalidOrExpiredRefresh",
+        message: "Invalid or expired refresh token",
+      });
+    }
+
+    tokenDoc.revokedAt = new Date();
+    await tokenDoc.save();
+
+    const user = await User.findById(tokenDoc.userId);
+    if (!user || user.status === "SUSPENDED") {
+      await revokeAllUserTokens(tokenDoc.userId);
+      res.clearCookie("refreshToken");
+      return res.status(401).json({
+        code: "InvalidOrExpiredRefresh",
+        message: "User not valid for refresh",
+      });
+    }
+    const accessToken = generateAccessToken(user);
+    const newRefreshToken = await generateRefreshToken(
+      user._id,
+      req.headers["user-agent"] || "unknown",
+      req.ip
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    return res.status(200).json({ accessToken });
+  } catch (err) {
+    console.error("Refresh error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
