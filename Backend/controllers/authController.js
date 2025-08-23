@@ -31,6 +31,16 @@ const generateRefreshToken = async (userId, userAgent, ip) => {
   });
   return refreshToken;
 };
+
+const hashRefresh = (raw) =>
+  crypto.createHash("sha256").update(row).digest("hex");
+
+const revokeAllUserTokens = async (userId) => {
+  await RefreshToken.updateMany(
+    { userId, revokedAt: null },
+    { $set: { revokedAt: new Date() } }
+  );
+};
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -79,3 +89,57 @@ export const register = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ code: "InvalidCredentials", message: "Invalid Credentials" });
+    }
+    if (user.status === "SUSPENDED") {
+      return res
+        .status(423)
+        .json({ code: "UserSuspended", message: "User Suspended" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ code: "InvalidCredentials", message: "Invalid Credentials" });
+    }
+
+    const accessToken = await generateAccessToken(user);
+
+    const refreshToken = await generateRefreshToken(
+      user._id,
+      req.headers["user-agent"] || "unknown",
+      req.ip
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+      },
+      accessToken,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const refresh = async (req, res) => {};
