@@ -20,7 +20,7 @@ export default function Register() {
         animate={{ opacity: 1, scale: 1 }}
         className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"
       >
-        <h1 className="text-4xl font-bold text-center mb-6 text-rose-600">
+        <h1 className="text-5xl text-center mb-4 text-rose-600 font-[Creepster]">
           🩸LifeDrop
         </h1>
         <h2 className="text-xl font-bold text-center mb-6 text-gray-400">
