@@ -33,7 +33,7 @@ const generateRefreshToken = async (userId, userAgent, ip) => {
 };
 
 const hashRefresh = (raw) =>
-  crypto.createHash("sha256").update(row).digest("hex");
+  crypto.createHash("sha256").update(raw).digest("hex");
 
 const revokeAllUserTokens = async (userId) => {
   await RefreshToken.updateMany(
@@ -210,4 +210,29 @@ export const refresh = async (req, res) => {
     console.error("Refresh error:", err);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const logOut = async (req, res) => {
+  try {
+    const raw = req.cookies?.refreshToken;
+    if (raw) {
+      const tokenHash = hashRefresh(raw);
+      await RefreshToken.updateOne(
+        { tokenHash, revokedAt: null },
+        { $set: { revokedAt: new Date() } }
+      );
+    }
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "Strict",
+    });
+    return res.status(204).send();
+  } catch (err) {
+    console.error("Logout error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+export const me = async (req, res) => {
+  const { id, email, role, isEmailVerified } = req.user;
+  return res.status(200).json({ id, email, role, isEmailVerified });
 };
