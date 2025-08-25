@@ -232,7 +232,8 @@ export const logOut = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 export const me = async (req, res) => {
-  const { id, email, role, isEmailVerified } = req.user;
-  return res.status(200).json({ id, email, role, isEmailVerified });
+  const { id, name, email, role, isEmailVerified } = req.user;
+  return res.status(200).json({ id, name, email, role, isEmailVerified });
 };
