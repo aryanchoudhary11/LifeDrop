@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 // Pages
 import Register from "./pages/Register";
-// import Login from "./pages/Login";
+import Login from "./pages/Login";
 // import Dashboard from "./pages/Dashboard";
 
 const PrivateRoute = ({ children }) => {
@@ -50,14 +50,14 @@ function App() {
                 </PageWrapper>
               }
             />
-            {/* <Route
+            <Route
               path="/login"
               element={
                 <PageWrapper>
                   <Login />
                 </PageWrapper>
               }
-            /> */}
+            />
 
             {/* <Route
               path="/dashboard"
