@@ -23,7 +23,7 @@ export default function Login() {
       setAuth({ user: data.user, accessToken: data.accessToken });
       setSuccess("Login successful");
       setError("");
-      setTimeout(() => navigate("/"), 3000);
+      setTimeout(() => navigate("/profile"), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
       setSuccess("");
@@ -93,10 +93,10 @@ export default function Login() {
               <p className="mt-2 text-gray-600">{success}</p>
 
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/profile")}
                 className="mt-4 px-5 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition"
               >
-                Go to Home
+                Go to Profile
               </button>
             </motion.div>
           </motion.div>

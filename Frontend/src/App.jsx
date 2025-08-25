@@ -4,13 +4,13 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/authContext";
 import { AnimatePresence, motion } from "framer-motion";
 
 // Pages
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-// import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -59,16 +59,16 @@ function App() {
               }
             />
 
-            {/* <Route
-              path="/dashboard"
+            <Route
+              path="/profile"
               element={
                 <PrivateRoute>
                   <PageWrapper>
-                    <Dashboard />
+                    <Profile />
                   </PageWrapper>
                 </PrivateRoute>
               }
-            /> */}
+            />
 
             {/* Default Redirect */}
             {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
