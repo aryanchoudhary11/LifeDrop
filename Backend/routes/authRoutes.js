@@ -7,7 +7,6 @@ import {
   register,
 } from "../controllers/authController.js";
 import { auth } from "../middleware/auth.js";
-import { getMyProfile } from "../controllers/donorController.js";
 
 const router = express.Router();
 

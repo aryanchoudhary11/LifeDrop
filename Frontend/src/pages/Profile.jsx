@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useAuth } from "../context/authContext";
 import { useEffect, useState } from "react";
-import { getDonorProfile, getMe } from "../services/AuthService.js";
+import { getMe } from "../services/AuthService.js";
 
 export default function Profile() {
   const { auth } = useAuth();
@@ -12,8 +12,6 @@ export default function Profile() {
       if (!auth?.accessToken) return;
       const { data } = await getMe(auth.accessToken);
       setProfile(data);
-      const donor = await getDonorProfile(auth.accessToken);
-      setProfile((prev) => ({ ...prev, donor: donor.data }));
     };
     fetchData();
   }, [auth]);

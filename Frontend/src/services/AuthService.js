@@ -32,9 +32,4 @@ export const getMe = (token) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
-export const getDonorProfile = (token) =>
-  API.get("/donors/me", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
 export default API;
