@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const ROLES = ["DONOR", "SEEKER"];
 const STATUS = ["ACTIVE", "SUSPENDED", "DELETED"];
 
 const userSchema = new Schema(
@@ -26,11 +25,6 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    role: {
-      type: String,
-      enum: ROLES,
-      required: true,
-    },
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -44,7 +38,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.index({ role: 1, status: 1 });
+userSchema.index({ status: 1 });
 
 const User = mongoose.model("User", userSchema);
 

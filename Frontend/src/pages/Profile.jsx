@@ -12,10 +12,8 @@ export default function Profile() {
       if (!auth?.accessToken) return;
       const { data } = await getMe(auth.accessToken);
       setProfile(data);
-      if (data.role === "DONOR") {
-        const donor = await getDonorProfile(auth.accessToken);
-        setProfile((prev) => ({ ...prev, donor: donor.data }));
-      }
+      const donor = await getDonorProfile(auth.accessToken);
+      setProfile((prev) => ({ ...prev, donor: donor.data }));
     };
     fetchData();
   }, [auth]);
@@ -29,9 +27,6 @@ export default function Profile() {
         </p>
         <p>
           <span>Email:</span> {profile.email}
-        </p>
-        <p>
-          <span>Role:</span> {profile.role}
         </p>
       </motion.div>
     </div>

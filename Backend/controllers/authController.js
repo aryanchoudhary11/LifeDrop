@@ -5,11 +5,9 @@ import User from "../models/User.js";
 import RefreshToken from "../models/RefreshToken.js";
 
 const generateAccessToken = async (user) => {
-  return jwt.sign(
-    { userId: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" }
-  );
+  return jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "15m",
+  });
 };
 
 const generateRefreshToken = async (userId, userAgent, ip) => {
@@ -43,11 +41,7 @@ const revokeAllUserTokens = async (userId) => {
 };
 export const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
-
-    if (!["DONOR", "SEEKER"].includes(role)) {
-      return res.status(400).json({ message: "Invalid role" });
-    }
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -60,7 +54,6 @@ export const register = async (req, res) => {
       name,
       email,
       passwordHash,
-      role,
     });
 
     const accessToken = await generateAccessToken(user);
@@ -77,7 +70,6 @@ export const register = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
       },
       tokens: {
         accessToken,
@@ -131,7 +123,6 @@ export const login = async (req, res) => {
       user: {
         id: user._id,
         email: user.email,
-        role: user.role,
         isEmailVerified: user.isEmailVerified,
       },
       accessToken,
@@ -234,6 +225,6 @@ export const logOut = async (req, res) => {
 };
 
 export const me = async (req, res) => {
-  const { id, name, email, role, isEmailVerified } = req.user;
-  return res.status(200).json({ id, name, email, role, isEmailVerified });
+  const { id, name, email, isEmailVerified } = req.user;
+  return res.status(200).json({ id, name, email, isEmailVerified });
 };

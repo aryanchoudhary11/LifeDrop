@@ -8,7 +8,6 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    role: "DONOR",
   });
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -65,14 +64,6 @@ export default function Register() {
             className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-rose-400"
             onChange={handleChange}
           />
-          <select
-            name="role"
-            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-rose-400"
-            onChange={handleChange}
-          >
-            <option value="DONOR">Donor</option>
-            <option value="SEEKER">Seeker</option>
-          </select>
           <button
             type="Submit"
             className="w-full rounded-xl bg-rose-500 text-white py-3 font-medium  shadow hover:bg-rose-600 transition-all cursor-pointer"
