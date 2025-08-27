@@ -1,9 +1,20 @@
 import axios from "axios";
+
 const API = axios.create({
   baseURL: "http://localhost:5000/api/v1/auth",
-  withCredentials: true,
+  withCredentials: true, // important for cookies
 });
 
+// Attach accessToken from localStorage on every request
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle 401 errors + refresh flow
 API.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -12,24 +23,23 @@ API.interceptors.response.use(
       try {
         const { data } = await API.post("/refresh");
         localStorage.setItem("accessToken", data.accessToken);
-        API.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${data.accessToken}`;
+
+        // retry original request with new token
+        err.config.headers.Authorization = `Bearer ${data.accessToken}`;
         return API(err.config);
       } catch (e) {
         console.error("Refresh failed", e);
+        localStorage.removeItem("accessToken");
       }
     }
     return Promise.reject(err);
   }
 );
 
+// Auth API functions
 export const registerUser = (payload) => API.post("/register", payload);
 export const loginUser = (payload) => API.post("/login", payload);
 export const logoutUser = () => API.post("/logout");
-export const getMe = (token) =>
-  API.get("/me", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export const getMe = () => API.get("/me");
 
 export default API;
