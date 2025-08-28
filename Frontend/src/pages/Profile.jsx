@@ -41,6 +41,20 @@ export default function Profile() {
           {profile.name}
         </h2>
         <p className="text-gray-600">{profile.email}</p>
+        <div className="mt-3">
+          {profile.isEmailVerified ? (
+            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+              ✅ Verified
+            </span>
+          ) : (
+            <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+              ⚠️ Not Verified
+            </span>
+          )}
+        </div>
+        <div className="mt-6">
+          <LogoutButton />
+        </div>
       </motion.div>
     </div>
   );
