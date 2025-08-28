@@ -10,75 +10,38 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!auth?.accessToken) return;
-      const { data } = await getMe();
-      setProfile(data);
-      console.log("Profile data:", data);
+      try {
+        const { data } = await getMe();
+        setProfile(data);
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+      }
     };
-    fetchData();
+    if (auth?.accessToken) fetchData();
   }, [auth]);
-  if (!profile) return <p className="text-center mt-10">Loading...</p>;
+  if (!profile)
+    return <p className="text-center mt-10 text-gray-500">Loading...</p>;
   return (
-    <div>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <h2>My Profile</h2>
-        <p>
-          <span>Name:</span> {profile.name}
-        </p>
-        <p>
-          <span>Email:</span> {profile.email}
-        </p>
-        <LogoutButton />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-rose-200 px-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-md text-center"
+      >
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="w-24 h-24 rounded-full bg-rose-500 text-white flex items-center justify-center mx-auto text-3xl font-bold shadow-lg"
+        >
+          {profile.name ? profile.name.charAt(0).toUpperCase() : "?"}
+        </motion.div>
+        <h2 className="mt-4 font-bold text-2xl text-gray-800">
+          {profile.name}
+        </h2>
+        <p className="text-gray-600">{profile.email}</p>
       </motion.div>
     </div>
   );
 }
-
-// src/pages/ProfilePage.jsx
-// import { useEffect, useState } from "react";
-// import { getMe, getDonorProfile } from "../services/AuthService";
-// import { useAuth } from "../context/AuthContext";
-// import { motion } from "framer-motion";
-
-// export default function ProfilePage() {
-//   const { auth } = useAuth();
-//   const [profile, setProfile] = useState(null);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       if (!auth?.accessToken) return;
-//       const { data } = await getMe(auth.accessToken);
-//       setProfile(data);
-//       if (data.role === "DONOR") {
-//         const donor = await getDonorProfile(auth.accessToken);
-//         setProfile((prev) => ({ ...prev, donor: donor.data }));
-//       }
-//     };
-//     fetchData();
-//   }, [auth]);
-
-//   if (!profile) return <p className="text-center mt-10">Loading...</p>;
-
-//   return (
-//     <div className="p-10 bg-gradient-to-br from-green-100 to-green-300 h-screen">
-//       <motion.div
-//         initial={{ opacity: 0 }}
-//         animate={{ opacity: 1 }}
-//         className="max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-8"
-//       >
-//         <h2 className="text-2xl font-bold text-green-600 mb-4">My Profile</h2>
-//         <p><span className="font-semibold">Name:</span> {profile.name}</p>
-//         <p><span className="font-semibold">Email:</span> {profile.email}</p>
-//         <p><span className="font-semibold">Role:</span> {profile.role}</p>
-//         {profile.donor && (
-//           <div className="mt-4">
-//             <h3 className="font-bold text-green-500">Donor Info:</h3>
-//             <p>Blood Type: {profile.donor.bloodType}</p>
-//             <p>City: {profile.donor.location.city}</p>
-//             <p>Phone: {profile.donor.contact.phone}</p>
-//           </div>
-//         )}
-//       </motion.div>
-//     </div>
-//   );
-// }
