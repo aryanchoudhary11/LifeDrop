@@ -63,6 +63,14 @@ export const register = async (req, res) => {
       req.headers["user-agent"] || "unknown",
       req.ip
     );
+    const verificationToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // TODO: Send email with this link instead of just returning
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
 
     res.status(201).json({
       message: "User registered successfully",
@@ -75,6 +83,7 @@ export const register = async (req, res) => {
         accessToken,
         refreshToken,
       },
+      verificationLink,
     });
   } catch (err) {
     console.error("Register error:", err);
@@ -227,4 +236,29 @@ export const logOut = async (req, res) => {
 export const me = async (req, res) => {
   const { id, name, email, isEmailVerified } = req.user;
   return res.status(200).json({ id, name, email, isEmailVerified });
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+    if (!token) {
+      res.status(400).json({ message: "Missing verification token" });
+    }
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(payload.userId);
+    if (!user) {
+      res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(200).json({ message: "Email already verified" });
+    }
+
+    user.isEmailVerified = true;
+    await User.save();
+    res.status(200).josn({ message: "Email verified successfully!" });
+  } catch (err) {
+    console.error("Verify email error: ", err);
+    res.status(400).json({ message: "Unable to verify email" });
+  }
 };

@@ -5,6 +5,7 @@ import {
   me,
   refresh,
   register,
+  verifyEmail,
 } from "../controllers/authController.js";
 import { auth } from "../middleware/auth.js";
 
@@ -16,5 +17,6 @@ router.post("/refresh", refresh);
 router.post("/logout", logOut);
 
 router.get("/me", auth, me);
+router.get("/verify-email", verifyEmail);
 
 export default router;
