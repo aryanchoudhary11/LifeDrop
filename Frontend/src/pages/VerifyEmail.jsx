@@ -24,7 +24,7 @@ export default function VerifyEmail() {
         const { data } = await verifyEmail(token);
         setStatus("success");
         setMessage(data.message || "Email verified successfully");
-        // setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => navigate("/login"), 3000);
       } catch (err) {
         setStatus("error");
         setMessage(err.response?.data?.message || "Verification failed");

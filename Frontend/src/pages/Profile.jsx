@@ -48,9 +48,23 @@ export default function Profile() {
               ✅ Verified
             </span>
           ) : (
-            <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-              ⚠️ Not Verified
-            </span>
+            <>
+              <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                ⚠️ Not Verified
+              </span>
+              {auth?.verificationLink && (
+                <div className="mt-4">
+                  <a
+                    href={auth.verificationLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition"
+                  >
+                    Verify Now
+                  </a>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="mt-6">
