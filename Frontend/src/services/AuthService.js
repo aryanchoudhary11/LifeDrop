@@ -2,10 +2,9 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL: "http://localhost:5000/api/v1/auth",
-  withCredentials: true, // important for cookies
+  withCredentials: true,
 });
 
-// Attach accessToken from localStorage on every request
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -14,7 +13,6 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 errors + refresh flow
 API.interceptors.response.use(
   (res) => res,
   async (err) => {
@@ -24,7 +22,6 @@ API.interceptors.response.use(
         const { data } = await API.post("/refresh");
         localStorage.setItem("accessToken", data.accessToken);
 
-        // retry original request with new token
         err.config.headers.Authorization = `Bearer ${data.accessToken}`;
         return API(err.config);
       } catch (e) {
@@ -36,7 +33,6 @@ API.interceptors.response.use(
   }
 );
 
-// Auth API functions
 export const registerUser = (payload) => API.post("/register", payload);
 export const loginUser = (payload) => API.post("/login", payload);
 export const logoutUser = () => API.post("/logout");

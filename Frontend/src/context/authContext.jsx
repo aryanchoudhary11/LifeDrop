@@ -1,22 +1,24 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
+const STORAGE_KEY = "auth";
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(null);
-
-  useEffect(() => {
-    const storedAuth = localStorage.getItem("auth");
-    if (storedAuth) {
-      setAuth(JSON.parse(storedAuth));
+  const [auth, setAuth] = useState(() => {
+    try {
+      const storedAuth = localStorage.getItem(STORAGE_KEY);
+      return storedAuth ? JSON.parse(storedAuth) : null;
+    } catch (err) {
+      console.error("Failed to parse stored auth:", err);
+      return null;
     }
-  }, []);
+  });
 
   useEffect(() => {
     if (auth) {
-      localStorage.setItem("auth", JSON.stringify(auth));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
     } else {
-      localStorage.removeItem("auth");
+      localStorage.removeItem(STORAGE_KEY);
     }
   }, [auth]);
 

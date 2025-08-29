@@ -11,7 +11,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await getMe();
+        const { data } = await getMe(localStorage.getItem("accessToken"));
         setProfile(data);
       } catch (err) {
         console.error("Failed to load profile:", err);
@@ -19,6 +19,7 @@ export default function Profile() {
     };
     if (auth?.accessToken) fetchData();
   }, [auth]);
+
   if (!profile)
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
   return (
