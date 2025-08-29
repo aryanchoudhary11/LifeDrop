@@ -128,6 +128,16 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
+    let verificationLink = null;
+    if (!user.isEmailVerified) {
+      const verificationToken = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+      );
+      verificationLink = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
+    }
+
     res.status(200).json({
       user: {
         id: user._id,
@@ -135,6 +145,7 @@ export const login = async (req, res) => {
         isEmailVerified: user.isEmailVerified,
       },
       accessToken,
+      verificationLink,
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -242,12 +253,12 @@ export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.query;
     if (!token) {
-      res.status(400).json({ message: "Missing verification token" });
+      return res.status(400).json({ message: "Missing verification token" });
     }
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(payload.userId);
     if (!user) {
-      res.status(400).json({ message: "Invalid or expired token" });
+      return res.status(400).json({ message: "Invalid or expired token" });
     }
 
     if (user.isEmailVerified) {
@@ -255,10 +266,10 @@ export const verifyEmail = async (req, res) => {
     }
 
     user.isEmailVerified = true;
-    await User.save();
-    res.status(200).josn({ message: "Email verified successfully!" });
+    await user.save();
+    return res.status(200).json({ message: "Email verified successfully!" });
   } catch (err) {
     console.error("Verify email error: ", err);
-    res.status(400).json({ message: "Unable to verify email" });
+    return res.status(400).json({ message: "Unable to verify email" });
   }
 };

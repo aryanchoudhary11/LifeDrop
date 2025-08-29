@@ -21,6 +21,7 @@ export default function Login() {
       const { data } = await loginUser(form);
       localStorage.setItem("accessToken", data.accessToken);
       setAuth({ user: data.user, accessToken: data.accessToken });
+      console.log("Login response:", data);
       setSuccess("Login successful");
       setError("");
       setTimeout(() => navigate("/profile"), 3000);

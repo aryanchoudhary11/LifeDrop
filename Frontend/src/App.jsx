@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import VerifyEmail from "./pages/VerifyEmail";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -65,6 +66,16 @@ function App() {
                 <PrivateRoute>
                   <PageWrapper>
                     <Profile />
+                  </PageWrapper>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/verify-email"
+              element={
+                <PrivateRoute>
+                  <PageWrapper>
+                    <VerifyEmail />
                   </PageWrapper>
                 </PrivateRoute>
               }

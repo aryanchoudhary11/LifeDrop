@@ -37,5 +37,6 @@ export const registerUser = (payload) => API.post("/register", payload);
 export const loginUser = (payload) => API.post("/login", payload);
 export const logoutUser = () => API.post("/logout");
 export const getMe = () => API.get("/me");
+export const verifyEmail = (token) => API.get(`/verify-email?token=${token}`);
 
 export default API;
