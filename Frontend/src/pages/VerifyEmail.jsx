@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { verifyEmail } from "../services/AuthService.js";
 
@@ -7,8 +7,11 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const didRun = useRef(false);
 
   useEffect(() => {
+    if (didRun.current) return;
+    didRun.current = true;
     const token = searchParams.get("token");
     if (!token) {
       setStatus("error");
