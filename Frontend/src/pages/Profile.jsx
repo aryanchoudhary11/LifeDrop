@@ -7,12 +7,23 @@ import LogoutButton from "../components/Logout.jsx";
 export default function Profile() {
   const { auth } = useAuth();
   const [profile, setProfile] = useState();
+  const [donor, setDonor] = useState(null);
+  const [form, setForm] = useState({ bloodType: "", city: "", pincode: "" });
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await getMe(localStorage.getItem("accessToken"));
         setProfile(data);
+        if (data.isEmailVerified) {
+          try {
+            const donorRes = await API.get("/donors/me");
+            setDonor(donorRes.data);
+          } catch {
+            setDonor(null);
+          }
+        }
       } catch (err) {
         console.error("Failed to load profile:", err);
       }
@@ -20,6 +31,18 @@ export default function Profile() {
     if (auth?.accessToken) fetchData();
   }, [auth]);
 
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleDonorSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await API.post("/donors/register", form);
+      setMessage(data.message);
+      setDonor(data.donor);
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Donor registration failed");
+    }
+  };
   if (!profile)
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
   return (
@@ -44,29 +67,9 @@ export default function Profile() {
         <p className="text-gray-600">{profile.email}</p>
         <div className="mt-3">
           {profile.isEmailVerified ? (
-            <>
-              <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                ✅ Verified
-              </span>
-              <div>
-                <h2>Register as Donar:</h2>
-                <form>
-                  <input type="text" placeholder="Enter your address" />
-                  <input type="number" placeholder="Enter your pincode" />
-                  <label htmlFor="BloodGroup">Select Blood Group</label>
-                  <select name="BloodGroup">
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                </form>
-              </div>
-            </>
+            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+              ✅ Verified
+            </span>
           ) : (
             <>
               <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
@@ -87,6 +90,78 @@ export default function Profile() {
             </>
           )}
         </div>
+        {profile.isEmailVerified && (
+          <div className="mt-6 text-left">
+            {donor ? (
+              <div className="p-4 bg-green-50 rounded-xl">
+                <h3 className="font-bold text-lg text-green-700">
+                  🩸 Registered Donor
+                </h3>
+                <p>
+                  <b>Blood Type:</b> {donor.bloodType}
+                </p>
+                <p>
+                  <b>City:</b> {donor.city}
+                </p>
+                <p>
+                  <b>Pincode:</b> {donor.pincode}
+                </p>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleDonorSubmit}
+                className="p-4 bg-indigo-50 rounded-xl space-y-3"
+              >
+                <h3 className="font-bold text-lg text-indigo-700">
+                  🩸 Register as Donor
+                </h3>
+                <select
+                  name="bloodType"
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-xl"
+                  required
+                >
+                  <option value="">Select Blood Type</option>
+                  <option>A+</option>
+                  <option>A-</option>
+                  <option>B+</option>
+                  <option>B-</option>
+                  <option>AB+</option>
+                  <option>AB-</option>
+                  <option>O+</option>
+                  <option>O-</option>
+                </select>
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-xl"
+                  required
+                />
+                <input
+                  type="text"
+                  name="pincode"
+                  placeholder="Pincode"
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-xl"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 transition"
+                >
+                  Submit
+                </button>
+                {message && (
+                  <p className="mt-2 text-sm text-center text-gray-600">
+                    {message}
+                  </p>
+                )}
+              </form>
+            )}
+          </div>
+        )}
         <div className="mt-6">
           <LogoutButton />
         </div>
