@@ -44,13 +44,33 @@ export default function Profile() {
         <p className="text-gray-600">{profile.email}</p>
         <div className="mt-3">
           {profile.isEmailVerified ? (
-            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
-              ✅ Verified
-            </span>
+            <>
+              <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                ✅ Verified
+              </span>
+              <div>
+                <h2>Register as Donar:</h2>
+                <form>
+                  <input type="text" placeholder="Enter your address" />
+                  <input type="number" placeholder="Enter your pincode" />
+                  <label htmlFor="BloodGroup">Select Blood Group</label>
+                  <select name="BloodGroup">
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </form>
+              </div>
+            </>
           ) : (
             <>
               <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-                ⚠️ Not Verified
+                ⚠️ Verify to register as donar
               </span>
               {auth?.verificationLink && (
                 <div className="mt-4">
