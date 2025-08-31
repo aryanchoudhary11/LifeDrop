@@ -3,6 +3,7 @@ import { useAuth } from "../context/authContext";
 import { useEffect, useState } from "react";
 import { getMe } from "../services/AuthService.js";
 import LogoutButton from "../components/Logout.jsx";
+import API from "../services/AuthService.js";
 
 export default function Profile() {
   const { auth } = useAuth();
@@ -33,8 +34,10 @@ export default function Profile() {
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
+
   const handleDonorSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const { data } = await API.post("/donors/register", form);
       setMessage(data.message);

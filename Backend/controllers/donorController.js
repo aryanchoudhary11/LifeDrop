@@ -6,7 +6,7 @@ export const registerDonor = async (req, res) => {
     if (!req.user.isEmailVerified) {
       return res.status(403).json({ message: "Email must be verified first" });
     }
-    const existing = await Donor.findOne(req.user.id);
+    const existing = await Donor.findOne({ userId: req.user.id });
     if (existing) {
       return res.status(409).json({ message: "Already registered as Donor" });
     }
