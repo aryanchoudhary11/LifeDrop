@@ -34,3 +34,28 @@ export const getMyDonor = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateDonor = async (req, res) => {
+  try {
+    const { bloodType, city, pincode, availability, visibility } = req.body;
+    const donor = await Donor.findOne({ userId: req.user.id });
+    if (!donor) {
+      return res
+        .status(404)
+        .json({ message: "You are not registered as a donor" });
+    }
+
+    if (bloodType) donor.bloodType = bloodType;
+    if (city) donor.city = city;
+    if (pincode) donor.pincode = pincode;
+    if (availability) donor.availability = availability;
+    if (typeof visibility === "boolean") donor.visibility = visibility;
+
+    await donor.save();
+
+    res.json({ message: "Donor details updated successfully", donor });
+  } catch (err) {
+    console.error("Update donor error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

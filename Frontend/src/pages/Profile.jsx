@@ -11,6 +11,7 @@ export default function Profile() {
   const [donor, setDonor] = useState(null);
   const [form, setForm] = useState({ bloodType: "", city: "", pincode: "" });
   const [message, setMessage] = useState("");
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +47,19 @@ export default function Profile() {
       setMessage(err.response?.data?.message || "Donor registration failed");
     }
   };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await API.put("/donors/update", form);
+      setMessage(data.message);
+      setDonor(data.donor);
+      setEditing(false);
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Update failed");
+    }
+  };
+
   if (!profile)
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
   return (
@@ -109,6 +123,18 @@ export default function Profile() {
                 <p>
                   <b>Pincode:</b> {donor.pincode}
                 </p>
+                <p>
+                  <b>Availability:</b> {donor.availability}
+                </p>
+                <p>
+                  <b>Visible:</b> {donor.visibility ? "Yes" : "No"}
+                </p>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
+                >
+                  Edit Details
+                </button>
               </div>
             ) : (
               <form
@@ -164,6 +190,79 @@ export default function Profile() {
               </form>
             )}
           </div>
+        )}
+        {editing && (
+          <form
+            onSubmit={handleUpdateSubmit}
+            className="p-4 bg-yellow-50 rounded-xl space-y-3 mt-4"
+          >
+            <h3 className="font-bold text-lg text-yellow-700">
+              ✏️ Edit Donor Details
+            </h3>
+            <select
+              name="bloodType"
+              className="w-full p-2 border rounded-xl"
+              value={form.bloodType || donor.bloodType}
+              onChange={handleChange}
+            >
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <input
+              type="text"
+              name="city"
+              defaultValue={donor.city}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-xl"
+            />
+            <input
+              type="text"
+              name="pincode"
+              defaultValue={donor.pincode}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-xl"
+            />
+            <select
+              name="availability"
+              defaultValue={donor.availability}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-xl"
+            >
+              <option value="AVAILABLE">Available</option>
+              <option value="NOT_AVAILABLE">Not Available</option>
+            </select>
+            <select
+              name="visibility"
+              defaultValue={donor.visibility}
+              onChange={(e) =>
+                setForm({ ...form, visibility: e.target.value === "true" })
+              }
+              className="w-full p-2 border rounded-xl"
+            >
+              <option value="true">Visible</option>
+              <option value="false">Hidden</option>
+            </select>
+            <button
+              type="submit"
+              className="w-full bg-yellow-600 text-white py-2 rounded-xl hover:bg-yellow-700 transition"
+            >
+              Save Changes
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              className="w-full mt-2 bg-gray-300 text-gray-800 py-2 rounded-xl hover:bg-gray-400 transition"
+            >
+              Cancel
+            </button>
+          </form>
         )}
         <div className="mt-6">
           <LogoutButton />
