@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
+import Home from "./pages/Home";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -42,6 +43,7 @@ function App() {
       <Router>
         <AnimatePresence mode="wait">
           <Routes>
+            <Route path="/" element={<Home />} />
             {/* Public Routes */}
             <Route
               path="/register"
