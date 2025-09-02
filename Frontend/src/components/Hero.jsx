@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import HeroImg from "../../public/heroImg.png";
 export default function Hero() {
   return (
-    <section className="flex items-center justify-around text-center py-24 px-6 bg-white shadow-2xl rounded-b-3xl">
+    <section className="relative flex items-center justify-around text-center py-24 px-6 bg-white shadow-[0_15px_40px_rgba(0,0,0,0.2)] z-10">
       <div className="flex flex-col justify-center items-center">
         <motion.h1
           initial={{ y: -40, opacity: 0 }}
