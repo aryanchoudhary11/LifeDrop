@@ -1,6 +1,7 @@
 import Hero from "../components/Hero";
 import WhyDonate from "../components/WhyDonate";
 import HowItWorks from "../components/HowItWorks";
+import HomeCTA from "../components/HomeCTA";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <WhyDonate />
       <HowItWorks />
+      <HomeCTA />
     </div>
   );
 }
