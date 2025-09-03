@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import Home from "./pages/Home";
+import Footer from "./components/Footer";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -86,6 +87,7 @@ function App() {
             {/* Default Redirect */}
             {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
           </Routes>
+          <Footer />
         </AnimatePresence>
       </Router>
     </AuthProvider>
