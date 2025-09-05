@@ -70,6 +70,35 @@ export default function Donors() {
             Search
           </button>
         </form>
+        {loading ? (
+          <p className="text-gray-500 text-center">Loading donors...</p>
+        ) : donors.length === 0 ? (
+          <p className="text-gray-500 text-center">No donors found.</p>
+        ) : (
+          <div>
+            {donors.map((donor) => (
+              <div
+                key={donor._id}
+                className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition"
+              >
+                <div className="text-xl font-bold text-rose-600">
+                  {donor.userId?.name || "Anonymous"}
+                </div>
+
+                <p className="text-gray-600">{donor.userId?.email}</p>
+                <p>
+                  <b>Blood Type:</b> {donor.bloodType}
+                </p>
+                <p>
+                  <b>City:</b> {donor.city}
+                </p>
+                <p>
+                  <b>Pincode:</b> {donor.pincode}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
