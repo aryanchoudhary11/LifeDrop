@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
+import Donors from "./pages/Donors";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -81,6 +82,14 @@ function App() {
                     <VerifyEmail />
                   </PageWrapper>
                 </PrivateRoute>
+              }
+            />
+            <Route
+              path="/donors"
+              element={
+                <PageWrapper>
+                  <Donors />
+                </PageWrapper>
               }
             />
 

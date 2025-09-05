@@ -59,3 +59,19 @@ export const updateDonor = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const listDonors = async (req, res) => {
+  try {
+    const { bloodType, pincode } = req.query;
+    let filter = { visibility: true, availability: "AVAILABLE" };
+
+    if (pincode) filter.pincode = pincode;
+    if (bloodType) filter.bloodType = bloodType;
+
+    const donors = await Donor.find(filter).populate("userId", "name email");
+    res.json(donors);
+  } catch (err) {
+    console.error("List donors error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
