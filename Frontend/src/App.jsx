@@ -15,6 +15,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
 import Donors from "./pages/Donors";
+import Navbar from "./components/Nabar";
 
 const PrivateRoute = ({ children }) => {
   const { auth } = useAuth();
@@ -44,6 +45,7 @@ function App() {
     <AuthProvider>
       <Router>
         <AnimatePresence mode="wait">
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             {/* Public Routes */}
