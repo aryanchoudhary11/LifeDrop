@@ -204,7 +204,7 @@ export const refresh = async (req, res) => {
         message: "User not valid for refresh",
       });
     }
-    const accessToken = generateAccessToken(user);
+    const accessToken = await generateAccessToken(user);
     const newRefreshToken = await generateRefreshToken(
       user._id,
       req.headers["user-agent"] || "unknown",

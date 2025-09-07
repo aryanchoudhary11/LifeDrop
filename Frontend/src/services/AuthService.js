@@ -27,6 +27,7 @@ API.interceptors.response.use(
       } catch (e) {
         console.error("Refresh failed", e);
         localStorage.removeItem("accessToken");
+        logoutUser();
       }
     }
     return Promise.reject(err);
