@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/v1/auth",
+  baseURL: "https://lifedrop-rm2q.onrender.com/api/v1/auth",
   withCredentials: true,
 });
 
