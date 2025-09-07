@@ -124,6 +124,9 @@ export default function Profile() {
                   <b>Pincode:</b> {donor.pincode}
                 </p>
                 <p>
+                  <b>Phone Number:</b> {donor.phone}
+                </p>
+                <p>
                   <b>Availability:</b> {donor.availability}
                 </p>
                 <p>
@@ -172,6 +175,14 @@ export default function Profile() {
                   type="text"
                   name="pincode"
                   placeholder="Pincode"
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-xl"
+                  required
+                />
+                <input
+                  type="number"
+                  name="phone"
+                  placeholder="Phone"
                   onChange={handleChange}
                   className="w-full p-2 border rounded-xl"
                   required
@@ -226,6 +237,13 @@ export default function Profile() {
               type="text"
               name="pincode"
               defaultValue={donor.pincode}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-xl"
+            />
+            <input
+              type="number"
+              name="phone"
+              defaultValue={donor.phone}
               onChange={handleChange}
               className="w-full p-2 border rounded-xl"
             />

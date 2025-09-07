@@ -15,6 +15,7 @@ const donorSchema = new mongoose.Schema(
     },
     city: { type: String, required: true },
     pincode: { type: String, required: true },
+    phone: { type: String, required: true },
     availability: {
       type: String,
       enum: ["AVAILABLE", "NOT_AVAILABLE"],

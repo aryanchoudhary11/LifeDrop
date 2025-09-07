@@ -13,7 +13,7 @@ export default function Donors() {
       setLoading(true);
       let query = [];
       if (pin) query.push(`pincode=${pin}`);
-      if (blood) query.push(`bloodType=${blood}`);
+      if (blood) query.push(`bloodType=${encodeURIComponent(blood)}`);
       const { data } = await API.get(
         query.length > 0 ? `/donors/all?${query.join("&")}` : "/donors/all"
       );
@@ -75,7 +75,7 @@ export default function Donors() {
         ) : donors.length === 0 ? (
           <p className="text-gray-500 text-center">No donors found.</p>
         ) : (
-          <div>
+          <div className="space-y-4">
             {donors.map((donor) => (
               <div
                 key={donor._id}
@@ -94,6 +94,9 @@ export default function Donors() {
                 </p>
                 <p>
                   <b>Pincode:</b> {donor.pincode}
+                </p>
+                <p>
+                  <b>Phone:</b> {donor.phone}
                 </p>
               </div>
             ))}

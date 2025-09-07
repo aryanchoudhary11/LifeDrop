@@ -2,7 +2,7 @@ import Donor from "../models/Donor.js";
 
 export const registerDonor = async (req, res) => {
   try {
-    const { bloodType, city, pincode } = req.body;
+    const { bloodType, city, pincode, phone } = req.body;
     if (!req.user.isEmailVerified) {
       return res.status(403).json({ message: "Email must be verified first" });
     }
@@ -15,6 +15,7 @@ export const registerDonor = async (req, res) => {
       bloodType,
       city,
       pincode,
+      phone,
     });
 
     res.status(201).json({ message: "Donor registered successfully", donor });
@@ -37,7 +38,8 @@ export const getMyDonor = async (req, res) => {
 
 export const updateDonor = async (req, res) => {
   try {
-    const { bloodType, city, pincode, availability, visibility } = req.body;
+    const { bloodType, city, pincode, phone, availability, visibility } =
+      req.body;
     const donor = await Donor.findOne({ userId: req.user.id });
     if (!donor) {
       return res
@@ -48,6 +50,7 @@ export const updateDonor = async (req, res) => {
     if (bloodType) donor.bloodType = bloodType;
     if (city) donor.city = city;
     if (pincode) donor.pincode = pincode;
+    if (phone) donor.phone = phone;
     if (availability) donor.availability = availability;
     if (typeof visibility === "boolean") donor.visibility = visibility;
 
@@ -66,9 +69,19 @@ export const listDonors = async (req, res) => {
     let filter = { visibility: true, availability: "AVAILABLE" };
 
     if (pincode) filter.pincode = pincode;
-    if (bloodType) filter.bloodType = bloodType;
+
+    if (bloodType) {
+      filter.bloodType = bloodType.trim().toUpperCase();
+    }
+
+    console.log("Donor Search Filter:", filter);
 
     const donors = await Donor.find(filter).populate("userId", "name email");
+
+    if (!donors.length) {
+      return res.status(404).json({ message: "No donors found" });
+    }
+
     res.json(donors);
   } catch (err) {
     console.error("List donors error:", err);
