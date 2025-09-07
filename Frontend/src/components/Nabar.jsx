@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -24,16 +24,17 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link
           to="/"
-          className="text-3xl font-[Creepster] text-rose-600 drop-shadow-md"
+          className="text-2xl sm:text-3xl md:text-3xl font-[Creepster] text-rose-600 drop-shadow-md"
         >
           🩸 LifeDrop
         </Link>
-        <div className="hidden md:flex items-center gap-6">
+
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="text-gray-700 hover:text-rose-600 transition"
+              className="text-gray-700 hover:text-rose-600 transition text-sm sm:text-base"
             >
               {link.label}
             </Link>
@@ -43,13 +44,13 @@ export default function Navbar() {
             <>
               <Link
                 to="/profile"
-                className="text-gray-700 hover:text-rose-600 transition"
+                className="text-gray-700 hover:text-rose-600 transition text-sm sm:text-base"
               >
                 Profile
               </Link>
               <button
                 onClick={handleLogout}
-                className="bg-rose-600 text-white rounded-lg px-3 py-1 hover:bg-rose-700 cursor-pointer transition"
+                className="bg-rose-600 text-white rounded-lg px-3 py-1 text-sm sm:text-base hover:bg-rose-700 transition"
               >
                 Logout
               </button>
@@ -58,13 +59,13 @@ export default function Navbar() {
             <>
               <Link
                 to="/login"
-                className="bg-indigo-600 text-white rounded-lg px-3 py-1 hover:bg-indigo-700 cursor-pointer transition"
+                className="bg-indigo-600 text-white rounded-lg px-3 py-1 text-sm sm:text-base hover:bg-indigo-700 transition"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-rose-600 text-white rounded-lg px-3 py-1 hover:bg-rose-700 cursor-pointer transition"
+                className="bg-rose-600 text-white rounded-lg px-3 py-1 text-sm sm:text-base hover:bg-rose-700 transition"
               >
                 Register
               </Link>
@@ -81,13 +82,13 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden bg-white shadow-lg px-4 py-3 space-y-3 ">
+        <div className="md:hidden bg-white shadow-lg px-4 py-3 space-y-3">
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setOpen(false)}
-              className="block text-gray-700 hover:text-rose-600 transition"
+              className="block text-gray-700 hover:text-rose-600 transition text-base"
             >
               {link.label}
             </Link>
@@ -98,13 +99,13 @@ export default function Navbar() {
               <Link
                 to="/profile"
                 onClick={() => setOpen(false)}
-                className="block text-gray-700 hover:text-rose-600 transition"
+                className="block text-gray-700 hover:text-rose-600 transition text-base"
               >
                 Profile
               </Link>
               <button
                 onClick={handleLogout}
-                className=" text-left px-3 py-1 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition"
+                className="w-full text-left px-3 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 transition text-base"
               >
                 Logout
               </button>
@@ -113,13 +114,13 @@ export default function Navbar() {
             <>
               <Link
                 to="/login"
-                className="bg-indigo-600 text-white rounded-lg px-3 py-1 hover:bg-indigo-700 cursor-pointer transition"
+                className="block bg-indigo-600 text-white rounded-lg px-3 py-2 text-base hover:bg-indigo-700 transition"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="bg-rose-600 text-white rounded-lg px-3 py-1 hover:bg-rose-700 cursor-pointer transition"
+                className="block bg-rose-600 text-white rounded-lg px-3 py-2 text-base hover:bg-rose-700 transition"
               >
                 Register
               </Link>

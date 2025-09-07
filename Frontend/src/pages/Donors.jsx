@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/AuthService.js";
 
 export default function Donors() {
@@ -24,21 +23,26 @@ export default function Donors() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchDonors();
   }, []);
+
   const handleSearch = (e) => {
     e.preventDefault();
     fetchDonors(pincode, bloodType);
   };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-red-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 to-red-100 p-4 sm:p-6 md:p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-rose-600 mb-6 font-['Vend_Sans']">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-rose-600 mb-6 font-['Vend_Sans']">
           🩸 Donor Directory
         </h1>
+
+        {/* Search Form */}
         <form
-          className="flex flex-col md:flex-row justify-center gap-3 mb-8"
+          className="flex flex-col md:flex-row justify-center items-center gap-3 mb-8"
           onSubmit={handleSearch}
         >
           <input
@@ -46,12 +50,12 @@ export default function Donors() {
             placeholder="Enter Pincode.."
             value={pincode}
             onChange={(e) => setPincode(e.target.value)}
-            className="p-3 border rounded-xl w-60"
+            className="p-3 border rounded-xl w-full md:w-60"
           />
           <select
             value={bloodType}
             onChange={(e) => setBloodType(e.target.value)}
-            className="p-3 border rounded-xl w-60"
+            className="p-3 border rounded-xl w-full md:w-60"
           >
             <option value="">All Blood Types</option>
             <option value="A+">A+</option>
@@ -65,11 +69,13 @@ export default function Donors() {
           </select>
           <button
             type="submit"
-            className="px-6 py-3 bg-rose-600 text-white rounded-xl hover:bg-rose-700 cursor-pointer transition"
+            className="w-full md:w-auto px-6 py-3 bg-rose-600 text-white rounded-xl hover:bg-rose-700 cursor-pointer transition text-sm sm:text-base"
           >
             Search
           </button>
         </form>
+
+        {/* Donors List */}
         {loading ? (
           <p className="text-gray-500 text-center">Loading donors...</p>
         ) : donors.length === 0 ? (
@@ -79,23 +85,24 @@ export default function Donors() {
             {donors.map((donor) => (
               <div
                 key={donor._id}
-                className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition"
+                className="bg-white p-4 sm:p-6 rounded-2xl shadow hover:shadow-lg transition"
               >
-                <div className="text-xl font-bold text-rose-600">
+                <div className="text-xl sm:text-2xl font-bold text-rose-600">
                   {donor.userId?.name || "Anonymous"}
                 </div>
-
-                <p className="text-gray-600">{donor.userId?.email}</p>
-                <p>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  {donor.userId?.email}
+                </p>
+                <p className="text-sm sm:text-base">
                   <b>Blood Type:</b> {donor.bloodType}
                 </p>
-                <p>
+                <p className="text-sm sm:text-base">
                   <b>City:</b> {donor.city}
                 </p>
-                <p>
+                <p className="text-sm sm:text-base">
                   <b>Pincode:</b> {donor.pincode}
                 </p>
-                <p>
+                <p className="text-sm sm:text-base">
                   <b>Phone:</b> {donor.phone}
                 </p>
               </div>

@@ -23,9 +23,9 @@ export default function LogoutButton() {
       whileTap={{ scale: 0.9 }}
       whileHover={{ scale: 1.05 }}
       onClick={handleLogout}
-      className="px-5 py-2 rounded-xl bg-rose-500 text-white shadow-md hover:bg-rose-600 transition"
+      className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-rose-500 text-white text-sm sm:text-base shadow-md hover:bg-rose-600 transition"
     >
-      🚪 Logout
+      Logout
     </motion.button>
   );
 }

@@ -38,7 +38,6 @@ export default function Profile() {
 
   const handleDonorSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const { data } = await API.post("/donors/register", form);
       setMessage(data.message);
@@ -62,35 +61,38 @@ export default function Profile() {
 
   if (!profile)
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-rose-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-rose-200 px-4 py-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-md text-center"
+        className="bg-white rounded-2xl p-6 sm:p-8 shadow-2xl w-full max-w-md text-center"
       >
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="w-24 h-24 rounded-full bg-rose-500 text-white flex items-center justify-center mx-auto text-3xl font-bold shadow-lg"
+          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-rose-500 text-white flex items-center justify-center mx-auto text-2xl sm:text-3xl font-bold shadow-lg"
         >
           {profile.name ? profile.name.charAt(0).toUpperCase() : "?"}
         </motion.div>
-        <h2 className="mt-4 font-bold text-2xl text-gray-800">
+
+        <h2 className="mt-4 font-bold text-xl sm:text-2xl text-gray-800">
           {profile.name}
         </h2>
-        <p className="text-gray-600">{profile.email}</p>
+        <p className="text-gray-600 text-sm sm:text-base">{profile.email}</p>
+
         <div className="mt-3">
           {profile.isEmailVerified ? (
-            <span className="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+            <span className="px-3 py-1 text-xs sm:text-sm rounded-full bg-green-100 text-green-700">
               ✅ Verified
             </span>
           ) : (
             <>
-              <span className="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
-                ⚠️ Verify to register as donar
+              <span className="px-3 py-1 text-xs sm:text-sm rounded-full bg-yellow-100 text-yellow-700">
+                ⚠️ Verify to register as donor
               </span>
               {auth?.verificationLink && (
                 <div className="mt-4">
@@ -98,7 +100,7 @@ export default function Profile() {
                     href={auth.verificationLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition"
+                    className="px-4 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition text-sm sm:text-base inline-block"
                   >
                     Verify Now
                   </a>
@@ -107,10 +109,11 @@ export default function Profile() {
             </>
           )}
         </div>
+
         {profile.isEmailVerified && (
           <div className="mt-6 text-left">
             {donor ? (
-              <div className="p-4 bg-green-50 rounded-xl">
+              <div className="p-4 bg-green-50 rounded-xl space-y-2">
                 <h3 className="font-bold text-lg text-green-700">
                   🩸 Registered Donor
                 </h3>
@@ -134,7 +137,7 @@ export default function Profile() {
                 </p>
                 <button
                   onClick={() => setEditing(true)}
-                  className="mt-3 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
+                  className="mt-2 w-full py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition text-sm sm:text-base"
                 >
                   Edit Details
                 </button>
@@ -150,7 +153,7 @@ export default function Profile() {
                 <select
                   name="bloodType"
                   onChange={handleChange}
-                  className="w-full p-2 border rounded-xl"
+                  className="w-full p-2 border rounded-xl text-sm sm:text-base"
                   required
                 >
                   <option value="">Select Blood Type</option>
@@ -168,7 +171,7 @@ export default function Profile() {
                   name="city"
                   placeholder="City"
                   onChange={handleChange}
-                  className="w-full p-2 border rounded-xl"
+                  className="w-full p-2 border rounded-xl text-sm sm:text-base"
                   required
                 />
                 <input
@@ -176,7 +179,7 @@ export default function Profile() {
                   name="pincode"
                   placeholder="Pincode"
                   onChange={handleChange}
-                  className="w-full p-2 border rounded-xl"
+                  className="w-full p-2 border rounded-xl text-sm sm:text-base"
                   required
                 />
                 <input
@@ -184,12 +187,12 @@ export default function Profile() {
                   name="phone"
                   placeholder="Phone"
                   onChange={handleChange}
-                  className="w-full p-2 border rounded-xl"
+                  className="w-full p-2 border rounded-xl text-sm sm:text-base"
                   required
                 />
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 transition"
+                  className="w-full bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 transition text-sm sm:text-base"
                 >
                   Submit
                 </button>
@@ -202,6 +205,7 @@ export default function Profile() {
             )}
           </div>
         )}
+
         {editing && (
           <form
             onSubmit={handleUpdateSubmit}
@@ -212,7 +216,7 @@ export default function Profile() {
             </h3>
             <select
               name="bloodType"
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
               value={form.bloodType || donor.bloodType}
               onChange={handleChange}
             >
@@ -231,27 +235,27 @@ export default function Profile() {
               name="city"
               defaultValue={donor.city}
               onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
             />
             <input
               type="text"
               name="pincode"
               defaultValue={donor.pincode}
               onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
             />
             <input
               type="number"
               name="phone"
               defaultValue={donor.phone}
               onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
             />
             <select
               name="availability"
               defaultValue={donor.availability}
               onChange={handleChange}
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
             >
               <option value="AVAILABLE">Available</option>
               <option value="NOT_AVAILABLE">Not Available</option>
@@ -262,26 +266,27 @@ export default function Profile() {
               onChange={(e) =>
                 setForm({ ...form, visibility: e.target.value === "true" })
               }
-              className="w-full p-2 border rounded-xl"
+              className="w-full p-2 border rounded-xl text-sm sm:text-base"
             >
               <option value="true">Visible</option>
               <option value="false">Hidden</option>
             </select>
             <button
               type="submit"
-              className="w-full bg-yellow-600 text-white py-2 rounded-xl hover:bg-yellow-700 transition"
+              className="w-full bg-yellow-600 text-white py-2 rounded-xl hover:bg-yellow-700 transition text-sm sm:text-base"
             >
               Save Changes
             </button>
             <button
               type="button"
               onClick={() => setEditing(false)}
-              className="w-full mt-2 bg-gray-300 text-gray-800 py-2 rounded-xl hover:bg-gray-400 transition"
+              className="w-full mt-2 bg-gray-300 text-gray-800 py-2 rounded-xl hover:bg-gray-400 transition text-sm sm:text-base"
             >
               Cancel
             </button>
           </form>
         )}
+
         <div className="mt-6">
           <LogoutButton />
         </div>

@@ -29,48 +29,57 @@ export default function Register() {
       setSuccess("");
     }
   };
+
   return (
-    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-rose-100 to-rose-300">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-rose-100 to-rose-300 px-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"
+        className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full max-w-md"
       >
         <h1 className="text-5xl text-center mb-4 text-rose-600 font-[Creepster]">
           🩸LifeDrop
         </h1>
-        <h2 className="text-xl font-bold text-center mb-6 text-gray-400">
+        <h2 className="text-xl sm:text-2xl font-bold text-center mb-6 text-gray-500">
           Create Account
         </h2>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Enter your name"
             name="name"
             onChange={handleChange}
-            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-rose-400"
+            aria-label="Name"
+            className="w-full border p-3 rounded-xl text-sm sm:text-base focus:ring-2 focus:ring-rose-400"
+            required
           />
           <input
             type="email"
             placeholder="Enter your email"
             name="email"
             onChange={handleChange}
-            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-rose-400"
+            aria-label="Email"
+            className="w-full border p-3 rounded-xl text-sm sm:text-base focus:ring-2 focus:ring-rose-400"
+            required
           />
           <input
             type="password"
             name="password"
             placeholder="Password"
-            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-rose-400"
             onChange={handleChange}
+            aria-label="Password"
+            className="w-full border p-3 rounded-xl text-sm sm:text-base focus:ring-2 focus:ring-rose-400"
+            required
           />
           <button
-            type="Submit"
-            className="w-full rounded-xl bg-rose-500 text-white py-3 font-medium  shadow hover:bg-rose-600 transition-all cursor-pointer"
+            type="submit"
+            className="w-full rounded-xl bg-rose-500 text-white py-3 font-medium shadow hover:bg-rose-600 transition-all cursor-pointer text-sm sm:text-base"
           >
             Register
           </button>
         </form>
+
         {error && (
           <motion.p
             initial={{ opacity: 0 }}
@@ -98,10 +107,9 @@ export default function Register() {
                 🎉 Success!
               </h2>
               <p className="mt-2 text-gray-600">{success}</p>
-
               <button
                 onClick={() => navigate("/login")}
-                className="mt-4 px-5 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition"
+                className="mt-4 px-5 py-2 bg-rose-600 text-white rounded-xl hover:bg-rose-700 transition text-sm sm:text-base"
               >
                 Login Now
               </button>
