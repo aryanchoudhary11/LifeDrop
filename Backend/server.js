@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "lifedrop-by-aryan-choudhary.netlify.app ",
+    origin: "https://lifedrop-by-aryan-choudhary.netlify.app ",
     credentials: true,
   })
 );
